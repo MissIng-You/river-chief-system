@@ -5,7 +5,10 @@ import * as getters from './getters';
 import user from './modules/user';
 import exception from './modules/exception';
 
-import { COMMON_AUTH } from './mutation-types';
+import { 
+    COMMON_AUTH,
+    COMMON_PERMISSION
+ } from './mutation-types';
 import authUtil from './../util/auth';
 
 // import createLogger from '../../../src/plugins/logger'
@@ -18,10 +21,14 @@ export function createStore() {
     let storeConfig = {
         state: {
             auth: authUtil.loggedIn(),     // 是否授权
+            permission: authUtil.getPermission(),   // 获取权限信息
         },
         mutations: {
             [COMMON_AUTH] (state, isAuth) {
                 state.auth = isAuth || false;
+            },
+            [COMMON_PERMISSION] (state, permission) {
+                state.permission = permission || {};
             }
         },
         actions,

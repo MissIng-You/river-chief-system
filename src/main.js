@@ -12,6 +12,7 @@ import {
 import injectComponents from './components';
 
 import App from './app.vue';
+
 import 'iview/dist/styles/iview.css';
 
 import VueI18n from 'vue-i18n';

@@ -1,5 +1,6 @@
 /** 公共模块 */
 export const COMMON_AUTH = 'COMMON_AUTH';
+export const COMMON_PERMISSION = 'COMMON_PERMISSION';
 export const COMMON_LOAD_DOING = 'COMMON_LOAD_DOING';
 export const COMMON_LOAD_DONE = 'COMMON_LOAD_DONE';
 

@@ -20,7 +20,9 @@
     }
 </style>
 <template>
-    <main-layout ref="mainLayout" :auth="auth"
+    <main-layout ref="mainLayout" 
+        :auth="auth"
+        :permission="permission"
         @on-login="logInOrOut"
         @on-logout="logInOrOut">
     </main-layout>
@@ -28,11 +30,11 @@
 
 <script type="text/babel">
 import { mapGetters, mapActions, mapState } from 'vuex';
-import { COMMON_AUTH } from './store/mutation-types'
+import { COMMON_AUTH, COMMON_PERMISSION } from './store/mutation-types'
 
 export default {
     computed: {
-        ...mapGetters(['getAuth']),
+        ...mapGetters(['getAuth', 'getPermission']),
         auth: {
             get() {
                 return this.getAuth;
@@ -41,6 +43,14 @@ export default {
                 this.$store.commit(COMMON_AUTH, value, { root: true })
             }
         },
+        permission: {
+            get() {
+                return this.getPermission;
+            },
+            set(value) {
+                this.$store.commit(COMMON_PERMISSION, value, { root: true })
+            }
+        }
     },
     methods: {
         logInOrOut(val) {

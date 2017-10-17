@@ -140,7 +140,7 @@ html,body {
             <div class="login-wrap-inner">
                 <div class="login-logo"></div>
                 <div class="login-header">
-                    <h4 class="title">信息管理系统</h4>
+                    <h4 class="title">管理信息系统</h4>
                     <h5 class="subtitle">
                         <span>RIVER CHIEF MANAGEMENT SYSTEM</span>
                     </h5>
@@ -148,7 +148,7 @@ html,body {
                 <div class="login-body">
                     <Input size="large" icon="ios-person-outline" v-model="username" placeholder="用户名/手机号">
                     </Input>
-                    <Input size="large" icon="ios-locked-outline" v-model="password" placeholder="登录密码">
+                    <Input type="password" size="large" icon="ios-locked-outline" v-model="password" placeholder="登录密码">
                     </Input>
                 </div>
                 <div class="login-footer">

@@ -28,9 +28,14 @@
         }
     }
 
+    .scrollbar {
+        width: 100%;
+        height: 560px;
+    }
+
     #container {
         width: 100%;
-        height: 680px;
+        height: 560px;
         overflow: hidden;
     }
 
@@ -80,8 +85,10 @@
                 <Button slot="tools" type="primary" icon="search" @click="resolveException(item)">解决问题</Button>
             </exception-item>
         </div>
-        <div id="container">
-        </div>
+        <ScrollBar classes="scrollbar">
+            <div id="container">
+            </div>
+        </ScrollBar>
         <div class="map-detail-list">
             <div id="exceptionsList"></div>
         </div>

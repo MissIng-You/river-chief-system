@@ -62,6 +62,14 @@
         }
     }
 
+    .main-layout .logo {
+        >img {
+            margin-top: 10px;
+            width: $main-layout-navbar-height / 3 * 2;
+            height: $main-layout-navbar-height / 3 * 2;
+        }
+    }
+
     .main-nav-inner {
         display: flex;
         .ivu-menu {
@@ -74,8 +82,12 @@
             background-color: $primary;
             .avatar-inner {
                 display: inline-block;
-                padding: 12px 30px;
+                padding: 12px 20px;
                 color: $white;
+            }
+            .username {
+                float: right;
+                padding: 10px 0 10px 10px;
             }
             .log-in {
                 .ivu-icon {
@@ -108,7 +120,7 @@
         }
         .main-layout-content {
             padding-top: 20px;
-            min-height: 680px;
+            // min-height: 680px;
             overflow: hidden;
         }
     }
@@ -146,7 +158,7 @@
             <div v-if="auth" class="main-nav-inner">
                 <Menu mode="horizontal" theme="dark" active-name="2">
                     <MenuItem name="1">
-                        <Icon type="ios-navigate"></Icon>首页
+                        <Icon type="ios-navigate"></Icon>一张图
                     </MenuItem>
                     <MenuItem name="2">
                         <router-link :to="{ path: '/exceptionmanage/index'}">
@@ -166,7 +178,7 @@
                     <Dropdown trigger="click" placement="bottom-end">
                         <a class="avatar-inner" href="javascript:;">
                             <Avatar icon="person" />
-                            <Icon type="chevron-down" />
+                            <span class="username">{{permission.PeopleName}}</span>
                         </a>
                         <DropdownMenu slot="list">
                             <DropdownItem>
@@ -195,9 +207,9 @@
                     <slot name="breadcrumb"></slot>
                 </div>
                 <div class="main-layout-content">
-                    <transition>
+                    <keep-alive>
                         <router-view></router-view>
-                    </transition>
+                    </keep-alive>
                 </div>
             </div>
         </div>
@@ -215,6 +227,10 @@ export default {
         auth: {
             type: Boolean,
             default: false
+        },
+        permission: {
+            type: Object,
+            default: () => {}
         }
     },
     computed: {
@@ -230,12 +246,19 @@ export default {
     },
     data() {
         return {
-            auth$: this.auth
+            auth$: this.auth,
+            permission$: this.permission,
         };
     },
     watch: {
         auth: function(val, oldVal) {
             this.auth$ = val;
+        },
+        permission: {
+            deep: true,
+            handler: function(val, oldVal) {
+                this.permission$ = val
+            }
         }
     },
     methods: {
