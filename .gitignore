@@ -1,0 +1,14 @@
+.idea
+.idea/
+.DS_Store
+node_modules/
+.project
+dist
+dist/*
+src/config/*.tmp
+src/config/env.js
+npm-debug.log
+node_modules.zip
+web-output
+web-output.zip
+webpack.*.js
