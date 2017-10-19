@@ -1,8 +1,8 @@
 <style scope lang="sass">
     #container {
         width: 100%;
-        height: 100%;
-        font-size: 15px;
+        height: 560px;
+        overflow: hidden;
     }
 </style>
 

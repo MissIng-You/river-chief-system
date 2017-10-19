@@ -377,23 +377,32 @@ export default {
     beforeCreate() {
         // 异步加载地图
         loadAMapAsync();
-        loadAMapUIAsync();
+        this.amapUi = loadAMapUIAsync();
     },
+    
     mounted() {
         let that = this;
-        window.setTimeout(() => {
+        let interval = window.setTimeout(() => {
             // 初始化地图
-            that.initAMap();
+            that.initAMap() && window.clearTimeout(interval);
         }, 1000);
 
         this.getDetails();
     },
     data() {
         return {
+            amapUi: null,
+            amap: window.AMap,
+            mapLoading: false,
             showSolveException: false,
             loading: false,
             item: {},
             map: null
+        }
+    },
+    watch: {
+        amap: function(val, oldVal) {
+            this.mapLoading = val ? true : false;
         }
     },
     methods: {
@@ -447,8 +456,8 @@ export default {
                 route: route
             }).then(() => {
                 this.loading = false;
-                this.datas = this.result.PageData;
-                createMarkerList(id, map, this.datas);
+                let datas = this.result.PageData;
+                createMarkerList(id, map, datas);
             });
         },
         getDetails() {

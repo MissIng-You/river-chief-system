@@ -72,10 +72,7 @@
 
     .main-nav-inner {
         display: flex;
-        .ivu-menu {
-            float:left;
-            overflow:hidden;
-        }
+        
         .main-layout-avatar {
             float: left;
             height: $main-layout-navbar-height;
@@ -108,6 +105,27 @@
             }
             .ivu-select-dropdown {
                 margin-top: 0;
+            }
+        }
+
+        .ivu-menu {
+            float:left;
+            overflow:hidden;
+        }
+
+        .ivu-menu-item > a {
+            display: inline-block;
+            height: $main-layout-navbar-height;
+            position: relative;
+            &.active::after {
+                position: absolute;
+                display: block;
+                content: "";
+                width: 100%;
+                height: 3px;
+                left: 0;
+                bottom: 0;
+                background-color: $primary;
             }
         }
     }
@@ -156,13 +174,17 @@
             </a>
 
             <div v-if="auth" class="main-nav-inner">
-                <Menu mode="horizontal" theme="dark" active-name="2">
+                <Menu ref="mainMenu" mode="horizontal" theme="dark" :active-name="activeName" @on-select="menuSelect">
                     <MenuItem name="1">
-                        <Icon type="ios-navigate"></Icon>一张图
+                        <router-link :to="{ path: '/amap'}">
+                            <Icon type="ios-navigate"></Icon>
+                            <span>一张图</span>
+                        </router-link>
                     </MenuItem>
                     <MenuItem name="2">
                         <router-link :to="{ path: '/exceptionmanage/index'}">
-                            <Icon type="ios-keypad"></Icon>异常管理
+                            <Icon type="ios-keypad"></Icon>
+                            <span>异常管理</span>
                         </router-link>
                     </MenuItem>
                     <MenuItem name="3">
@@ -178,7 +200,7 @@
                     <Dropdown trigger="click" placement="bottom-end">
                         <a class="avatar-inner" href="javascript:;">
                             <Avatar icon="person" />
-                            <span class="username">{{permission.PeopleName}}</span>
+                            <span class="username">{{permission && permission.PeopleName}}</span>
                         </a>
                         <DropdownMenu slot="list">
                             <DropdownItem>
@@ -207,9 +229,7 @@
                     <slot name="breadcrumb"></slot>
                 </div>
                 <div class="main-layout-content">
-                    <keep-alive>
-                        <router-view></router-view>
-                    </keep-alive>
+                    <router-view></router-view>
                 </div>
             </div>
         </div>
@@ -248,6 +268,7 @@ export default {
         return {
             auth$: this.auth,
             permission$: this.permission,
+            activeName: 2,
         };
     },
     watch: {
@@ -259,7 +280,7 @@ export default {
             handler: function(val, oldVal) {
                 this.permission$ = val
             }
-        }
+        },
     },
     methods: {
         logout() {
@@ -269,6 +290,10 @@ export default {
         login() {
             this.auth$ = false;
             this.$emit('on-login', this.auth$);
+        },
+        menuSelect(val) {
+            this.activeName = val;
+            console.log(val);
         }
     }
 };

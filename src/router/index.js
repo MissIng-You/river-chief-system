@@ -32,8 +32,8 @@ const routers = [{
         next('/login')
     }
 }, {
-    alias: '/',
-    path: '/exceptionmanage/index',
+    alias: '/exceptionmanage/index',
+    path: '/',
     meta: {
         title: '异常管理',
         requiresAuth: true
@@ -56,7 +56,8 @@ const routers = [{
 }, {
     path: '/amap',
     meta: {
-        title: '首页-地图'
+        title: '一张图',
+        requiresAuth: true
     },
     component: lazyLoading('AMap')
 }];
@@ -64,6 +65,7 @@ const routers = [{
 export function createRouter() {
     let router = new VueRouter({
         mode: 'hash',
+        linkActiveClass: 'active',
         scrollBehavior: (to, from, savedPosition) => {
             if (savedPosition) {
                 return savedPosition
