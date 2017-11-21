@@ -2,7 +2,8 @@ import http from './../util/http';
 import {
     USER_LOGIN,
     USER_LOGOUT,
-    USER_REGISTER
+    USER_REGISTER,
+    USER_PEOPLE_INFO
 } from './constant';
 
 export default {
@@ -16,5 +17,9 @@ export default {
 
     logout(params) {
         return http.post(USER_LOGOUT, params);
-    }
+    },
+
+    getPeopleInfo(params) {
+        return http.post(USER_PEOPLE_INFO, params);
+    },
 }

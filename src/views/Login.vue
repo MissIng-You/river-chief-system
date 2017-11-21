@@ -175,7 +175,7 @@ export default {
     // },
     computed: {
         ...mapGetters('user', ['loading', 'result', 'error']),
-        ...mapState('user', ['model']),
+        ...mapState('user', ['model', 'peopleResult']),
         username: {
             get() {
                 return this.model.username;
@@ -203,7 +203,10 @@ export default {
             }).then(() => {
                 let { IsError: isError } = this.result;
                 if (!isError) {
-                    let { query: { redirect } } = state.route
+                    let { query: { redirect } } = state.route;
+
+                    this.getPeopleInfo();
+
                     this.$Message.success({
                         content: '登录成功，请稍后。。。',
                         duration: 1,
@@ -223,6 +226,20 @@ export default {
                         }
                     });
                 }
+            });
+        },
+
+        // 获取登录用户的人员信息
+        getPeopleInfo() {
+            let { dispatch, commit, state } = this.$store;
+            let { route } = state;
+            dispatch("user/getPeopleInfo", {
+                params: null,
+                $Message: this.$Message,
+                $router: this.$router,
+                route: route
+            }).then(() => {
+                console.log('peopleInfo:%o', this.peopleResult);
             });
         }
     }

@@ -2,6 +2,7 @@ import store from 'store';
 
 export const USER_TOKEN = '__USER_TOKEN__';
 export const USER_PERMISSION = '__USER_PERMISSION__';
+export const USER_PEOPLE_INFO = '__USER_PEOPLE_INFO__';
 
 export default {
     getToken() {
@@ -18,6 +19,14 @@ export default {
 
     setPermission(permission) {
         store.set(USER_PERMISSION, permission);
+    },
+
+    getPeopleInfo() {
+        return store.get(USER_PEOPLE_INFO);
+    },
+
+    setPeopleInfo(people) {
+        store.set(USER_PEOPLE_INFO, people);
     },
 
     logout(cb) {

@@ -6,11 +6,11 @@ $key-value-item-width: 200px;
 
 .key-value-item {
     line-height: 2.0;
-    width: $key-value-item-width;
+    // width: $key-value-item-width;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    align-items: center;
+    // align-items: center;
     justify-content: flex-start;
     .item-key {
         display: inline-block;
@@ -33,13 +33,19 @@ $key-value-item-width: 200px;
         max-width: $key-value-item-width - 60px;
         vertical-align: middle;
     }
+    .item-show-value {
+        display: inline-block;
+        // max-width: $key-value-item-width;
+        vertical-align: middle;
+        padding-right: 10px;
+    }
 }
 
 </style>
 <template>
     <div class="key-value-item">
         <span :id="data.key" class="item-key">{{data.label}}</span>
-        <span class="item-value">{{data.value}}</span>
+        <span :class="data.overflow === 'show' ? 'item-show-value' : 'item-value'">{{data.value}}</span>
     </div>
 </template>
 <script type="text/babel">
@@ -53,11 +59,5 @@ export default {
             default: () => {}
         }
     },
-    computed: {
-        
-    },
-    methods: {
-
-    }
 };
 </script>

@@ -11,7 +11,7 @@ const components = {
     NotFound,
     Empty,
     KeyValueItem,
-    ScrollBar: VueScrollbar
+    ScrollBar: VueScrollbar,
 };
 
 export default function injectComponents(Vue, options = {}) {

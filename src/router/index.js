@@ -60,6 +60,27 @@ const routers = [{
         requiresAuth: true
     },
     component: lazyLoading('AMap')
+}, {
+    path: '/patrolmanage/index',
+    meta: {
+        title: '巡河管理',
+        requiresAuth: true
+    },
+    component: lazyLoading('patrol-manage/Index')
+}, {
+    path: '/patrolmanage/patroldetail',
+    meta: {
+        title: '巡河管理-巡河管理详情',
+        requiresAuth: true
+    },
+    component: lazyLoading('patrol-manage/PatrolDetail')
+}, {
+    path: '/reportmanage/index',
+    meta: {
+        title: '公众上报',
+        requiresAuth: true
+    },
+    component: lazyLoading('report-manage/Index')
 }];
 
 export function createRouter() {

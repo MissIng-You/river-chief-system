@@ -20,6 +20,10 @@ import Locales from './locale';
 import zhLocale from 'iview/src/locale/lang/zh-CN';
 import enLocale from 'iview/src/locale/lang/en-US';
 
+// 引入Echarts
+import echarts from 'echarts'
+Vue.prototype.$echarts = echarts; 
+
 Vue.use(VueI18n);
 
 // 自动设置语言

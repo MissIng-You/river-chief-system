@@ -4,6 +4,7 @@ import * as actions from './actions';
 import * as getters from './getters';
 import user from './modules/user';
 import exception from './modules/exception';
+import patrol from './modules/patrol';
 
 import { 
     COMMON_AUTH,
@@ -35,7 +36,8 @@ export function createStore() {
         getters,
         modules: {
             user,
-            exception
+            exception,
+            patrol,
         },
         strict: debug,
         //   plugins: debug ? [createLogger()] : []

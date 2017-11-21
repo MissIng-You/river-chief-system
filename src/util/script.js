@@ -47,7 +47,7 @@ export function loadAMapAsync(success, error) {
                 resolve(window.AMap);
                 successs && success();
             }
-            insertScript('//webapi.amap.com/maps?v=1.3&key=608d75903d29ad471362f8c58c550daf&callback=AMapInit',
+            insertScript('//webapi.amap.com/maps?v=1.3&key=4d353e7dd92b5d7e596476705c68d5a0&callback=AMapInit',
                 () => {},
                 () => {
                     LoadAMapPromise = null;

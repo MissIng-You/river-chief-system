@@ -4,11 +4,13 @@
     $gray: #ccc;
     $panel-item-width: 200px;
     $panel-item-content-width: 120px;
-    $panel-min-height: 185px;
+    $panel-min-height: 235px;
+    $panel-min-width: 300px;
 
     .panel {
         display: flex;
         min-height: $panel-min-height; 
+        min-width: $panel-min-width;
         background-color: $white;
         border: 1px solid $gray;
         border-radius: 5px;
@@ -51,7 +53,7 @@
                 // margin: 0 8px;
                 overflow: hidden;
                 background-color: rgba($gray, .3);
-                background-size: 100% 100%;
+                background-size: cover;
                 background-repeat: no-repeat;
                 background-position: center center;
             }
@@ -64,6 +66,7 @@
             flex-wrap: wrap;
             align-items: center;
             justify-content: flex-start;
+            z-index: 100;
         }
         .panel-head {
             height: 40px;
@@ -107,60 +110,98 @@
 </style>
 
 <template>
-<div :class="getPanelClass()">
-    <div class="panel-carousel">
-        <div class="panel-tag">
-            <Tag :color="item.State === 100 ? 'red' : 'green'">{{item.State === 100 ? '未解决' : '已解决'}}</Tag>
+    <div :class="getPanelClass()">
+        <div class="panel-carousel">
+            <div class="panel-tag">
+                <Tag :color="getStateClasses(item.State)">{{getStateName(item.State)}}</Tag>
+            </div>
+            <Carousel :arrow="getCarouselArrow(item.ReportFileList)">
+                <CarouselItem v-for="(img, idx) in item.ReportFileList" :key="idx">
+                    <span class="img-carousel" :style="'background-image:url(' + img.FileUrl + ');'"></span>
+                </CarouselItem>
+            </Carousel>
         </div>
-        <Carousel :arrow="getCarouselArrow(item.ImgUrlList)">
-            <CarouselItem v-for="(img, idx) in item.ImgUrlList" :key="idx">
-                <span class="img-carousel" :style="'background-image:url(' + img + ');'"></span>
-            </CarouselItem>
-        </Carousel>
-    </div>
 
-    <div class="panel-wrap">
-        <div class="panel-head">
-            <h3>{{item.PollingMainItem}}</h3>
-            <h4 class="timer"><Icon type="clock" /><span>{{item.CreateTime}}</span></h4>
-            <slot name="tools"></slot>
-        </div>
-        <div class="panel-content">
-            <Row type="flex">
-                <Col span="24" class="panel-content-tags">
-                    <Tag type="dot" :color="getTagColor(pkey)" :key="pkey"
-                        v-for="(pitem, pkey) in getPollingSonItem(item.PollingSonItem)">{{pitem}}</Tag>
-                </Col>
-                <Col span="24">
-                    <key-value-item :data="{label: '上报人', value: item.CreatePeopleName}"></key-value-item>
-                </Col>
-                <Col span="24">
-                    <key-value-item :data="{label: '所属河段', value: item.ReachName}"></key-value-item>
-                </Col>
-                <Col span="24">
-                    <key-value-item :data="{label: '行政区划', value: item.FullAddress}"></key-value-item>
-                </Col>
-                <Col span="24">
-                    <Poptip trigger="hover" title="异常描述" :content="item.ExceptionsDescribe">
-                        <key-value-item :data="{label: '异常描述', value: item.ExceptionsDescribe}"></key-value-item>
-                    </Poptip>
-                </Col>
-            </Row>
+        <div class="panel-wrap">
+            <div class="panel-head">
+                <h3>{{item.MainInspectionItemName}}</h3>
+                <h4 class="timer">
+                    <Icon type="clock" />
+                    <span>{{item.CreateTime}}</span>
+                </h4>
+                <slot name="tools"></slot>
+            </div>
+            <div class="panel-content">
+                <Row type="flex" v-if="showDescribe">
+                    <Col span="24" class="panel-content-tags">
+                        <Tag type="dot" :color="getTagColor(pkey)" :key="pkey" v-for="(pitem, pkey) in getPollingSonItem(item.SonInspectionName)">{{pitem}}</Tag>
+                    </Col>
+                    <Col span="24">
+                        <key-value-item :data="{label: '上报人', value: item.PeopleName}"></key-value-item>
+                    </Col>
+                    <Col span="24">
+                        <key-value-item :data="{label: '所属河段', value: item.ObjectName}"></key-value-item>
+                    </Col>
+                    <Col span="24">
+                        <key-value-item :data="{label: '行政区划', value: item.FullAddress}"></key-value-item>
+                    </Col>
+                    <Col span="24">
+                        <Poptip trigger="hover" title="异常描述" :content="item.Description">
+                            <key-value-item :data="{label: '异常描述', value: item.Description}"></key-value-item>
+                        </Poptip>
+                    </Col>
+                </Row>
+                <custom-scrollbar v-show="!showDescribe" :height="height" fixed>
+                    <Row type="flex">
+                        <Col span="24" class="panel-content-tags">
+                            <Tag type="dot" :color="getTagColor(pkey)" :key="pkey" v-for="(pitem, pkey) in getPollingSonItem(item.SonInspectionName)">{{pitem}}</Tag>
+                        </Col>
+                        <Col span="24">
+                            <key-value-item :data="{label: '上报人', value: item.PeopleName}"></key-value-item>
+                        </Col>
+                        <Col span="24">
+                            <key-value-item :data="{label: '所属河段', value: item.ObjectName}"></key-value-item>
+                        </Col>
+                        <Col span="24">
+                            <key-value-item :data="{label: '行政区划', value: item.FullAddress}"></key-value-item>
+                        </Col>
+                        <Col span="24">
+                            <key-value-item :data="{label: '异常描述', overflow: 'show', value: item.Description}"></key-value-item>
+                        </Col>
+                        <Col span="24">
+                            <key-value-item :data="{label: '详细地址', overflow: 'show', value: item.Address && item.Address.length > 15 ? item.Address : item.FullAddress}"></key-value-item>
+                        </Col>
+                    </Row>
+                </custom-scrollbar>
+            </div>
         </div>
     </div>
-</div>
 </template>
 <script>
+import CustomScrollbar from "../shared/CustomScrollbar";
+
 export default {
     name: 'ExceptionItem',
+    components: {
+        CustomScrollbar
+    },
     props: {
         item: {
             type: Object,
-            default: () => {}
+            default: () => { }
         },
         vertical: {
             type: Boolean,
             default: false
+        },
+        showDescribe: {
+            type: Boolean,
+            default: true
+        }
+    },
+    data() {
+        return {
+            height: 180
         }
     },
     methods: {
@@ -170,7 +211,7 @@ export default {
         getCarouselArrow(value) {
             return value && value.length > 1
                 ? 'hover' : 'never';
-        }, 
+        },
         getPollingSonItem(value) {
             return value && value.split('|') || [];
         },
@@ -178,13 +219,21 @@ export default {
             let colors = ['blue', 'yellow', 'red', 'green'];
             return colors[index % 4];
         },
-        getStateClasses(state) {
-            let stateColors = {
-                '-1': 'primary',
-                '100': 'warning',
-                '200': 'success'
+        getStateName(value) {
+            const states = {
+                '1': '正常',
+                '2': '未解决',
+                '3': '已解决'
             };
-            return this.model.State === state ? stateColors[state] : 'ghost';
+            return value != null ? states[value] : states[0];
+        },
+        getStateClasses(value) {
+            const states = {
+                '1': 'primary',
+                '2': 'red',
+                '3': 'green'
+            };
+            return value != null ? states[value] : states[0];
         }
     }
 }

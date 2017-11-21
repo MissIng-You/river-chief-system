@@ -188,12 +188,14 @@
                         </router-link>
                     </MenuItem>
                     <MenuItem name="3">
-                        <Icon type="ios-analytics"></Icon>
-                        巡河管理
+                        <router-link :to="{ path: '/patrolmanage/index'}">
+                             <Icon type="ios-analytics"></Icon>巡河管理
+                        </router-link> 
                     </MenuItem>
                     <MenuItem name="4">
-                        <Icon type="ios-paper"></Icon>
-                        流程管理
+                        <router-link :to="{ path: '/reportmanage/index'}">
+                             <Icon type="ios-paper"></Icon>公众上报
+                        </router-link>
                     </MenuItem>
                 </Menu>
                 <div class="main-layout-avatar">
