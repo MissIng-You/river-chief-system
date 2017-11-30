@@ -46,7 +46,7 @@
         overflow: hidden;
         >img {
             float: left;
-            width: $main-layout-navbar-height;
+            width: $main-layout-navbar-height * 2;
             height: $main-layout-navbar-height;
         }
         .title{
@@ -65,8 +65,19 @@
     .main-layout .logo {
         >img {
             margin-top: 10px;
-            width: $main-layout-navbar-height / 3 * 2;
+            width: $main-layout-navbar-height / 3 * 4;
             height: $main-layout-navbar-height / 3 * 2;
+        }
+        .title {
+            padding-top: 10px;
+            padding-bottom: 10px;
+            .zh {
+                font-size: 14px;
+                letter-spacing: 2px;
+            }
+            .en {
+                font-size: 9px;
+            }
         }
     }
 
@@ -159,6 +170,11 @@
         left: 0;
         right: 0;
         text-align: center;
+        >p {
+            margin-top: 10px;
+            letter-spacing: 1px;
+            text-shadow: 0 1px 1px #999,0 2px 1px #666;
+        }
     }
     
 </style>
@@ -168,13 +184,19 @@
             <a class="logo" href="javascript:;">
                 <img src="./../assets/images/logo.png">
                 <div class="title">
-                    <p class="zh">成都市江河湖泊河长制信息管理平台</p>
-                    <p class="en">Chengdu City Management Information Platform for River Lake and River System</p>
+                    <p class="zh">智慧河长综合信息管理平台</p>
+                    <p class="en">Smart Rivers Comprehensive Information Mangaement Platform</p>
                 </div>
             </a>
 
             <div v-if="auth" class="main-nav-inner">
                 <Menu ref="mainMenu" mode="horizontal" theme="dark" :active-name="activeName" @on-select="menuSelect">
+                    <MenuItem name="5">
+                        <router-link :to="{ path: '/rivermanage/index'}">
+                            <Icon type="navicon"></Icon>
+                            <span>基础信息</span>
+                        </router-link>
+                    </MenuItem>
                     <MenuItem name="1">
                         <router-link :to="{ path: '/amap'}">
                             <Icon type="ios-navigate"></Icon>
@@ -236,7 +258,9 @@
             </div>
         </div>
         <div v-if="!auth" class="main-layout-copyright">
-            &copy; 2017 WANJIANG TECHNOLOGY
+            <p>四川省第二测绘地理信息工程院</p>
+            <p>成都万江港利科技股份有限公司</p>
+            <p>&copy; 2017 联合出品</p>
         </div>
     </div>
 </template>

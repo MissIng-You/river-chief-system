@@ -59,6 +59,9 @@ const state = {
         EndPhase: 1,
         PageIndex: 1,
         PageSize: 200,
+        StartTime: '', 
+        EndTime: '',
+        unit: -1
     },
     chartResult: null,
     chartError: null,
@@ -108,7 +111,9 @@ const state = {
         PeopleId: '',
         StartTime: '',
         EndTime: '',
-        ExceptionTotalState: ''
+        ExceptionTotalState: '',
+        PageIndex: 1,
+        PageSize: 65535
     },
 
     parentAreaModel: '510000000000',

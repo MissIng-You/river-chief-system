@@ -18,7 +18,7 @@ import auth from './../../util/auth';
 const state = {
   loading: false,   // 是否正在登录状态
   model: {       // 用户模型
-    username: '17313171720',
+    username: '13882016776',
     password: '123456'
   },
   result: null,   // 成功结果集

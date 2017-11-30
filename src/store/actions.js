@@ -11,3 +11,13 @@ export const loaded = ({commit}) => {
 export const auth = ({commit}, isAuth) => {
   commit(types.COMMON_AUTH, isAuth);
 }
+
+// 处理公用错误，并附带提示信息
+export const error = ({commit}, payload) => {
+  commit('COMMON_ERROR', payload);
+}
+
+// 更新State下面的模型值
+export const updateModel = ({commit}, payload) => {
+  commit('UPDATE_MODEL', payload);
+}

@@ -53,6 +53,13 @@ const routers = [{
         requiresAuth: true
     },
     component: lazyLoading('exception-manage/ExceptionSolve')
+},{
+    path: '/rivermanage/index',
+    meta: {
+        title: '基础信息',
+        requiresAuth: true,
+    },
+    component: lazyLoading('river-manage/Index')
 }, {
     path: '/amap',
     meta: {

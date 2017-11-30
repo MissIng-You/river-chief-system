@@ -3,7 +3,7 @@
     $primary: #44b8b7;
     $danger: #f06900;
     
-    .reply-list {
+    .reply-item {
         background-color: #fff;
 
         .reply-content {
@@ -79,24 +79,23 @@
     }
 </style>
 <template>
-    <div class="reply-list">
-        <div v-for="(item,index) in reply" :key="index">
+    <div class="reply-item">
+        <div>
             <Row class="reply-content">
                 <Col span="4" class="reply-user-wrap">
                     <div class="reply-user">
                         <div class="user-avatar">
-                            <!--<img src="../../assets/images/b.jpg" alt="">-->
                             <Icon type="person" class="avatar"></Icon>
                         </div>
-                        <span class="user-info">{{item.PeopleName}}</span>
-                        <span class="user-info">{{formatSolveTime(item.SolveTime, 'YYYY-MM-DD')}}</span>
-                        <span class="user-info">{{formatSolveTime(item.SolveTime, 'HH:mm:ss')}}</span>
+                        <span class="user-info">Frank</span>
+                        <span class="user-info">2017-11-12</span>
+                        <span class="user-info">14:00:00</span>
                     </div>
                 </Col>
                 <Col span="19" class="reply-desc">
-                    <p class="desc-text">{{item.SolveInfo}}</p>
-                    <div class="desc-image" v-for="(img,index) in item.SolveExceptionsFileList" :key="index">
-                        <img :src="img.FileUrl" alt="">
+                    <p class="desc-text">河流水质改善。河流水质改善。河流水质改善。河流水质改善。</p>
+                    <div class="desc-image">
+                        <img src="http://171.221.202.126:30002/Image/201711/2017111012055488019.jpg" alt="">
                     </div>
                     <div class="triangle"></div>
                 </Col>
@@ -110,7 +109,7 @@ import { mapGetters, mapState } from 'vuex';
 import moment from 'moment';
 
 export default {
-    name: 'ReplyList',
+    name: 'ReplyItem',
     props: {
         reply: {
             type: Array

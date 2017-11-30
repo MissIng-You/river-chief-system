@@ -58,11 +58,11 @@
     <div class="patrol-manage">
         <div class="pm-header">
             <span class="patrol-manage">巡河管理</span>
-            <div class="branch" @click="toggleChart">
+            <div class="branch" @click="toggleChart(true)">
                 <span v-bind:class="[ showChart ? 'branch-triangle-select' : 'branch-triangle' ]"></span>
                 <span v-bind:class="[ showChart ? 'branch-content-select' : 'branch-content' ]">查询</span>
             </div>
-            <div class="branch" @click="toggleChart">
+            <div class="branch" @click="toggleChart(false)">
                 <span v-bind:class="[ !showChart ? 'branch-triangle-select' : 'branch-triangle' ]"></span>
                 <span v-bind:class="[ !showChart ? 'branch-content-select' : 'branch-content' ]">统计</span>
             </div>
@@ -127,8 +127,9 @@ export default {
         }
     },
     methods: {
-        toggleChart() {
-            this.showChart = !this.showChart
+        // 切换查询统计的显示
+        toggleChart(showChart) {
+            this.showChart = showChart;
         },
         getChildArea(areaCode, callback) {
             let { dispatch, commit, state } = this.$store;

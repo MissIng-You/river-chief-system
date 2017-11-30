@@ -106,7 +106,7 @@
         <div class="em-index-search">
             <div class="condition">
                 <Input v-model="peopleName" @on-enter="getExceptions" icon="ios-search-outline" placeholder="上报人姓名" class="input-md"></Input>
-                <Cascader placeholder="选择地区" class="input-md" 
+                <Cascader placeholder="选择地区" class="input-lg" 
                     :data="rootAreas" :change-on-select="true" 
                     :load-data="getParentArea" :value="filterAreaCodes" 
                     @on-change="filterArea($event)">
@@ -129,7 +129,7 @@
         <custom-scrollbar>
             <div class="em-index-body">
                 <empty v-if="!datas || !datas.length" content="没有异常列表数据!" />
-                <Row :gutter="20">
+                <Row :gutter="20" style="width: 100%;">
                     <Col span="8" v-for="(item, index) in datas" :key="index">
                         <exception-item :item="item">
                             <Tooltip slot="tools" content="查看详情" placement="left" :disabled="mapDetailTootipDisabled">
@@ -148,15 +148,17 @@
             <Button class="next" type="primary" shape="circle" icon="chevron-right" @click="getNextPager()"></Button>
           </div>
         </div>
-        <create-problem :show="showAddModel" @on-refresh="handleRefresh" @on-cancel="handleCancel"></create-problem>
+        <add-exception :show="showAddModel" @on-refresh="handleRefresh" @on-cancel="handleCancel"></add-exception>
     </div>
 </template>
 <script>
 import { mapGetters, mapState } from "vuex";
 import ExceptionItem from "./ExceptionItem";
-import CreateProblem from "./CreateProblem";
+// import CreateProblem from "./CreateProblem";
 import CustomScrollbar from "../shared/CustomScrollbar";
 import auth from "../../util/auth";
+
+const AddException = () => import(/* webpackChunkName: "add-exception" */'./AddException.vue');
 
 // 创建双向绑定字段
 function createField(moduleName, context) {
@@ -187,7 +189,7 @@ function createField(moduleName, context) {
   };
 }
 
-// 创建异常模块下模型字段
+// 创建巡检模块下模型字段
 function createModelField(modelName, fieldName) {
   return {
     get() {
@@ -197,18 +199,19 @@ function createModelField(modelName, fieldName) {
       this.$store.commit("exception/UPDATE_MODEL", {
         model: modelName,
         key: fieldName,
-        value
+        value: value !== '-1' ? value : '',  // 处理全部情况下“-1”转换为"";
       });
     }
   };
 }
+
 
 export default {
   name: "ExceptionList",
   components: {
     ExceptionItem,
     CustomScrollbar,
-    CreateProblem
+    AddException,
   },
   computed: {
     ...mapGetters("exception", [
@@ -220,6 +223,8 @@ export default {
       "childAreaError"
     ]),
 
+    ...mapGetters('common', ['peopleResult']),
+
     ...mapState("exception", ["model", "parentAreaModel", "riverModel"]),
 
     pageIndex: createModelField("model", "PageIndex"),
@@ -228,7 +233,7 @@ export default {
     state: createModelField("model", "State"),
     peopleName: createModelField("model", "PeopleName"),
     riverId: createModelField("model", "RiverId"),
-    // areaCode: createModelField('AreaCode'),
+    areaCode: createModelField('model', "AreaCode"),
     beginTime: createModelField("model", "SearchStartTime"),
     endTime: createModelField("model", "SearchEndTime"),
   },
@@ -241,6 +246,7 @@ export default {
   },
   mounted(){
     //获取当前登录用户根节点行政区信息
+    // this.getPeopleInfo();
     this.getRootAreas();
     this.getExceptions();
   },
@@ -256,8 +262,6 @@ export default {
       showAddModel: false,      // 显示添加模态框
       totalPage: 0,     // 保存总页数
 
-      // 行政区划编码
-      areaCode: "",
       filterAreaCodes: [],
       rootAreas:[]
     };
@@ -267,23 +271,23 @@ export default {
     getRootAreas(){
       let peopleInfo = auth.getPeopleInfo();
       if (!peopleInfo || !peopleInfo.AreaCode || !peopleInfo.AreaLevel) return;
-      let { commit } = this.$store;
-      commit("exception/EXCEPTION_GET_ROOT_AREA_CODE_STATE", peopleInfo.AreaCode);
-      this.rootAreas = [{
+      
+      let tempArea = {
         value: peopleInfo.AreaCode,
         label: peopleInfo.AreaName,
         level: peopleInfo.AreaLevel,
         disabled:false,
-        loading: peopleInfo.AreaLevel < 5 ? false : true,
         children: []
-      }];
+      };
+      // 只允许加载到乡镇级别
+      if(peopleInfo.AreaLevel < 4) tempArea.loading = false;
+      this.rootAreas = [tempArea];
+
+      this.areaCode = peopleInfo.AreaCode;
     },
     // 处理刷新功能
     handleRefresh(show) {
       this.showAddModel = show;
-    //   let { commit } = this.$store;
-    //   commit("exception/UPDATE_AREA_CODE", this.parentAreaModel);
-    //   commit("exception/UPDATE_RIVER_ID", "");
       this.getExceptions();
     },
 
@@ -308,7 +312,8 @@ export default {
         "2": "warning",
         "3": "success"
       };
-      return this.state === state ? stateColors[state] : stateColors[0];
+      if(!this.state && state === -1) return stateColors["-1"];
+      return this.state === state ? stateColors[state] : 'default';
     },
 
     // 显示异常模态框
@@ -318,7 +323,7 @@ export default {
 
     // 过滤状态信息
     filterState(exState) {
-      this.state = exState === -1 ? undefined : exState;
+      this.state = exState === -1 ? '' : exState;
       this.pageIndex = 1;   // 过滤条件时，重置为第一页
       this.getExceptions();
     },
@@ -429,7 +434,8 @@ export default {
               disabled: false,
               children: []
             };
-            item.AreaLevel < 5 && (areaMap.loading = false);
+            // 只过滤到乡镇级别
+            item.AreaLevel < 4 && (areaMap.loading = false);
             return areaMap;
           });
 
@@ -461,6 +467,20 @@ export default {
         query: { id: item.Id, lat: item.Lat, lng: item.Lng }
       });
     },
+
+    // // 获取登录用户的人员信息
+    // getPeopleInfo() {
+    //     let { dispatch, commit, state } = this.$store;
+    //     let { route } = state;
+    //     dispatch("common/getPeopleInfo", {
+    //         params: null,
+    //         $Message: this.$Message,
+    //         $router: this.$router,
+    //         route: route
+    //     }).then(() => {
+    //         console.log('peopleInfo:%o', this.peopleResult);
+    //     });
+    // }
 
     
   }

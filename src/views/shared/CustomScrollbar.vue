@@ -3,11 +3,18 @@
         width: 100%;
         height: 400px;
     }
+    .custom-scrollbar-inner {
+        padding-right: 15px;
+        width: 100%;
+        min-height: 400px;
+    }
 </style>
 
 <template>
     <ScrollBar ref="scrollbar" classes="custom-scrollbar" :styles="scrollbarSetting">
-        <slot></slot>
+        <div :style="innerSetting" class="custom-scrollbar-inner">
+            <slot></slot>
+        </div>
     </ScrollBar>
 </template>
 <script>
@@ -28,6 +35,7 @@ export default {
     mounted() {
         if(this.fixed) {
             this.scrollbarSetting.height = `${this.height}px`;
+            this.innerSetting.minHeight = `${this.height}px`;
             return;
         }
         this._setScrollbarHeight();
@@ -35,6 +43,7 @@ export default {
     updated() {
         if(this.fixed) {
             this.scrollbarSetting.height = `${this.height}px`;
+            this.innerSetting.minHeight = `${this.height}px`;
             return;
         }
         this._setScrollbarHeight();
@@ -42,8 +51,10 @@ export default {
     data() {
         return {
             scrollbarSetting: {
-                width: '100%',
                 height: '400px'
+            },
+            innerSetting: {
+                minHeight: '400px'
             },
         }
     },
@@ -56,8 +67,11 @@ export default {
             let scrollbarRect = $scrollbar.getClientRects()
             let scrollbarTop = scrollbarRect && scrollbarRect[0] && scrollbarRect[0].top;
             let docHeight = getDocumentHeight();
-            this.scrollbarSetting.height = `${docHeight - scrollbarTop - 20}px`;
-        }
+            let scrollHeight = `${docHeight - scrollbarTop - 20}px`;
+
+            this.scrollbarSetting.height = scrollHeight;
+            this.innerSetting.minHeight = scrollHeight;
+        },
     }
 }
 

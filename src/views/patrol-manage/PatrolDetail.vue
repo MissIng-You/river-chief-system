@@ -43,6 +43,7 @@
         }
         .detail-content {
             padding: 10px;
+            min-height: 400px;
         }
     }
 </style>
@@ -84,10 +85,13 @@
                 <span v-else>查询中...</span>
             </Button>
         </div>
-        <div class="detail-content">
-            <empty v-if="!pollingRecords || !pollingRecords.length" content="没有巡河列表数据!" />
-            <Table v-show="pollingRecords && pollingRecords.length" border stripe :columns="type" :data="pollingRecords"></Table>
-        </div>
+        <custom-scrollbar>
+          <div class="detail-content">
+              <empty v-if="!pollingRecords || !pollingRecords.length" content="没有巡河列表数据!" />
+              <Table v-show="pollingRecords && pollingRecords.length" border stripe :columns="type" :data="pollingRecords"></Table>
+          </div>
+        </custom-scrollbar>
+        
         <problem-detail
           :show="openDetail" 
           :patrolDetailData="patrolDetailData" 
@@ -100,6 +104,7 @@
 <script>
 import { mapGetters, mapState } from "vuex";
 import ProblemDetail from "./ProblemDetail";
+import CustomScrollbar from '../shared/CustomScrollbar';
 import moment from "moment";
 
 //映射巡河模型对象
@@ -118,9 +123,10 @@ function createPatrolField(fieldName) {
 }
 
 export default {
-  name: "patrolDetail",
+  name: "PatrolDetail",
   components: {
-    ProblemDetail
+    ProblemDetail,
+    CustomScrollbar,
   },
 
   computed: {

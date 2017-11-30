@@ -1,11 +1,11 @@
 <style lang="sass" scoped>
-    .patrol-manage {
+    .report-manage {
         .pm-header {
             border-bottom: 2px solid #57a3f3;
             overflow: hidden;
             padding: 0 10px 0 10px;
 
-            .patrol-manage {
+            .report-manage {
                 font-weight: 900;
                 color: #57a3f3;
                 font-size: 14px;
@@ -55,14 +55,14 @@
     }
 </style>
 <template>
-    <div class="patrol-manage">
+    <div class="report-manage">
         <div class="pm-header">
-            <span class="patrol-manage">巡河管理</span>
-            <div class="branch" @click="toggleChart">
+            <span class="report-manage">公众上报</span>
+            <div class="branch" @click="toggleChart(true)">
                 <span v-bind:class="[ showChart ? 'branch-triangle-select' : 'branch-triangle' ]"></span>
                 <span v-bind:class="[ showChart ? 'branch-content-select' : 'branch-content' ]">查询</span>
             </div>
-            <div class="branch" @click="toggleChart">
+            <div class="branch" @click="toggleChart(false)">
                 <span v-bind:class="[ !showChart ? 'branch-triangle-select' : 'branch-triangle' ]"></span>
                 <span v-bind:class="[ !showChart ? 'branch-content-select' : 'branch-content' ]">统计</span>
             </div>
@@ -91,12 +91,12 @@ export default {
         CustomScrollbar
     },
     computed: {
-        ...mapGetters('patrol', {
+        ...mapGetters('report', {
             result: 'result',
             childAreaResult: 'childAreaResult',
             childAreaError: 'childAreaError'
         }),
-        ...mapState('patrol', {
+        ...mapState('report', {
             parentAreaModel: 'parentAreaModel',
         }),
     },
@@ -118,7 +118,7 @@ export default {
             dataCount: 0,
             // 每页显示多少条
             pageSize: 10,
-            patrolData: [],
+            reportData: [],
             pageIndex: 0,
 
             // 行政区划编码
@@ -127,13 +127,14 @@ export default {
         }
     },
     methods: {
-        toggleChart() {
-            this.showChart = !this.showChart
+        // 切换查询统计的显示
+        toggleChart(showChart) {
+            this.showChart = showChart;
         },
         getChildArea(areaCode, callback) {
             let { dispatch, commit, state } = this.$store;
 
-            dispatch('patrol/getChildArea', {
+            dispatch('common/getChildArea', {
                 params: areaCode || this.parentAreaModel,
                 $Message: this.$Message,
                 $router: this.$router,
@@ -156,7 +157,7 @@ export default {
         selectArea(areaCode, selectDatas) {
             this.riverAreaCode = areaCode[areaCode.length - 1];
             let { commit } = this.$store;
-            commit('patrol/PATROL_CHILD_AREA_STATE', this.riverAreaCode);
+            commit('common/COMMON_CHILD_AREA_STATE', this.riverAreaCode);
         },
         getReportInfo() {
             this.loading = true;

@@ -136,7 +136,6 @@
                 <input id='address' readonly="true" type="text">
             </div>
         </Modal>
-
     </div>
 </template>
 <script type="text/babel">

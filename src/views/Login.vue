@@ -52,14 +52,14 @@ html,body {
     margin-bottom: 15px;
     .title {
         position: relative;
-        letter-spacing: 5px;
+        letter-spacing: 2px;
         font-size: 18px;
         margin-bottom: 15px;
         &::before, &::after {
             display: block;
             position: absolute;
             content: "";
-            width: $login-title-height / 2;
+            width: 10px;
             height: 1px;
             background-color: $white;
             top: 50%;
@@ -140,7 +140,7 @@ html,body {
             <div class="login-wrap-inner">
                 <div class="login-logo"></div>
                 <div class="login-header">
-                    <h4 class="title">管理信息系统</h4>
+                    <h4 class="title">智慧河长综合信息管理</h4>
                     <h5 class="subtitle">
                         <span>RIVER CHIEF MANAGEMENT SYSTEM</span>
                     </h5>
@@ -176,6 +176,7 @@ export default {
     computed: {
         ...mapGetters('user', ['loading', 'result', 'error']),
         ...mapState('user', ['model', 'peopleResult']),
+        ...mapState('common', ['peopleResult']),
         username: {
             get() {
                 return this.model.username;
@@ -201,14 +202,14 @@ export default {
                 LoginName: this.model.username,
                 Pwd: this.model.password
             }).then(() => {
-                let { IsError: isError } = this.result;
+                let { IsError: isError, Message: message } = this.result;
                 if (!isError) {
                     let { query: { redirect } } = state.route;
 
                     this.getPeopleInfo();
 
                     this.$Message.success({
-                        content: '登录成功，请稍后。。。',
+                        content: '登录成功，请稍后...',
                         duration: 1,
                         onClose: () => {
                             this.$router.replace(redirect || '/');
@@ -218,7 +219,7 @@ export default {
                     });
                 } else {
                     this.$Message.error({
-                        content: '登录失败，请重试。。。',
+                        content: message || '登录失败，请重试!',
                         duration: 3,
                         onClose: () => {
                             commit('user/COMMON_LOAD_DONE');
@@ -233,7 +234,7 @@ export default {
         getPeopleInfo() {
             let { dispatch, commit, state } = this.$store;
             let { route } = state;
-            dispatch("user/getPeopleInfo", {
+            dispatch("common/getPeopleInfo", {
                 params: null,
                 $Message: this.$Message,
                 $router: this.$router,

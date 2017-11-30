@@ -7,8 +7,7 @@
 </style>
 
 <template>
-    <div id="container">
-    </div>
+    <div id="container"></div>
 </template>
 
 <script type="text/babel">

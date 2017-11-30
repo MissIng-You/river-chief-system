@@ -63,19 +63,21 @@
             :before-upload="handleBeforeUpload"
             multiple
             type="drag"
-            action="https://hz.enlitesoftware.com/api/Common/UploadFile?accessToken=&fileType=0"
+            :action="action"
             style="display: inline-block;width:58px;">
             <div style="width: 58px;height:58px;line-height: 58px;">
                 <Icon type="camera" size="20"></Icon>
             </div>
         </Upload>
-        <Modal title="View Image" v-model="visible">
+        <Modal title="图片预览" v-model="visible">
             <img :src="url" v-if="visible" style="width: 100%" />
+            <div slot="footer"></div>
         </Modal>
     </div>
     
 </template>
 <script>
+import commonService from '../../api/common-service';
 export default {
   name: "UpladList",
   props: {
@@ -86,6 +88,7 @@ export default {
   },
   data() {
     return {
+      action: commonService.getUploadUrl(),
       url: "",
       visible: false,
       uploadList: []
@@ -99,6 +102,7 @@ export default {
     handleRemove(file) {
       const fileList = this.$refs.upload.fileList;
       this.$refs.upload.fileList.splice(fileList.indexOf(file), 1);
+      this.$emit('on-remove', file);
     },
     handleSuccess(res, file, files) {
       file.url = res.Data && res.Data.AbsoluteUrl;

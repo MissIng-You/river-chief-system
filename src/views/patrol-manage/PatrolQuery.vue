@@ -90,9 +90,9 @@
                 </div>
             </div>
         </div>
-        <div class="pm-query-body">
+        <div class="pm-query-body" style="min-height: 580px;">
             <empty v-if="!datas || !datas.length" content="没有巡河列表数据!" />
-            <Table  v-show="datas && datas.length" border stripe height="300" :columns="dataColumnName" :data="datas"></Table>
+            <Table  v-show="datas && datas.length" border stripe :columns="dataColumnName" :data="datas"></Table>
             <div  v-show="datas && datas.length" class="page">
                 <Page :total="totalCount" :page-size="pageSize" @on-change="changePage" @on-page-size-change="selectSize" show-elevator show-sizer show-total></Page>
             </div>
@@ -137,10 +137,6 @@ export default {
       totalPage: 1,
       // 保存PatrolInfos
       datas: [],
-      defaultDatas: [{
-      }, {
-
-      }],
 
       dataColumnName: [
         {
@@ -174,7 +170,7 @@ export default {
           align: "center",
           render: (handler, params) => {
             let item = params && params.row;
-            let length = item && item.PeopleNameList.length;
+            let length = item && item.PeopleNameList && item.PeopleNameList.length;
             let peoples = item && item.PeopleNameList && item.PeopleNameList.join(',');
             return length < 2 
               ? peoples 
@@ -404,7 +400,7 @@ export default {
       }).then(() => {
         this.loading = false;
 
-        this.datas = this.patrolInfoResult.PageData || this.defaultDatas;
+        this.datas = this.patrolInfoResult && this.patrolInfoResult.PageData || [];
         //console.log(this.patrolInfoResult)
         this.getPages(this.patrolInfoResult);
       });
@@ -435,7 +431,7 @@ export default {
     changePage(index) {
       let that = this;
       that.pageIndex = index;
-      this.$nextTick(() => {
+      that.$nextTick(() => {
         that.getPatrolInfo();
       })
     },

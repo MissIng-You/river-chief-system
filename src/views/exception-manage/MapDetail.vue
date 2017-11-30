@@ -30,7 +30,7 @@
 
     #container {
         width: 100%;
-        height: 560px;
+        // height: 1000px;
         overflow: hidden;
     }
 
@@ -97,6 +97,8 @@ import ExceptionItem from "./ExceptionItem";
 import ExceptionSolve from "./ExceptionSolve";
 import ExceptionDetail from "./ExceptionDetail";
 import CustomScrollbar from '../shared/CustomScrollbar';
+
+import { getDocumentHeight } from '../../util/index';
 
 function createMarkerList(id, map, datas) {
   AMapUI.loadUI(
@@ -374,6 +376,13 @@ export default {
       // 初始化地图
       that.initAMap() && window.clearTimeout(interval);
     }, 1000);
+
+    var $container = document.getElementById('container');
+
+    let scrollbarRect = $container.getClientRects()
+    let scrollbarTop = scrollbarRect && scrollbarRect[0] && scrollbarRect[0].top;
+    let docHeight = getDocumentHeight();
+    $container.style.height = `${docHeight - scrollbarTop - 20}px`;
   },
 
   data() {

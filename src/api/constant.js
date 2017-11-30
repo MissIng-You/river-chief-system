@@ -37,3 +37,12 @@ export const REACH_GET_REACH_LIST_BY_AREA_AND_RIVER = '/Reach/GetReachListByArea
 export const COMMON_GET_RIVER_SYSTEMS = '/BaseInfo/GetRiverSystemList';
 export const COMMON_GET_CHILD_AREA = '/Common/GetChildArea';
 export const COMMON_UPLOAD_FILE = '/Common/UploadFile?accessToken=&fileType=0';
+
+//公众上报模块
+export const REPORT_INFO_DATA = '/WeChat/GetMassesReportList';
+export const DELETE_REPORT_RECORD = '/WeChat/DeleteReportById';
+export const UPDATE_REPORT_CANLOOKSTATE ='/WeChat/UpdateReportCanLookById';
+
+//基础信息模块
+export const RIVER_INFO_DATA = '/BaseInfo/GetRiverPagerListWhitThroughArea';
+export const RIVER_STATISTIC_INFO_DATA = '/BaseInfo/GetRiverStatisticInfo';

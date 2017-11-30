@@ -6,6 +6,12 @@
         // .ivu-modal {
         //     top: 0;
         // }
+        .required::after {
+            content:'*';
+            display: inline-block;
+            color: red;
+            font-size: 12px;
+        }
         .ex-header {
             color:#f60;
             text-align:center;
@@ -26,9 +32,11 @@
     <custom-scrollbar :height="250" fixed>
         <Row type="flex">
             <Col span="24" class="ex-content">
+                <span class="required">解决说明</span>
                 <Input v-model="solveExplain" type="textarea" :rows="4" placeholder="请输入解决说明..."></Input>
             </Col>
             <Col span="24" class="ex-uploads">
+                <span class="required">附件图片</span>
                 <upload-list :default-list="defaultList" @on-upload="handleUpload"></upload-list>
             </Col>
         </Row>
@@ -90,7 +98,12 @@ export default {
     methods: {
         // 解决异常
         handleException() {
-            if(!this.fileList|| !this.fileList.length || !this.solveExplain) return;
+            if(!this.fileList|| !this.fileList.length || !this.solveExplain) {
+                return this.$Message.error({
+                    content: '请输入解决说明, 或者上传图片',
+                    duration: 3,
+                })
+            }
 
             let { dispatch, commit, state } = this.$store;
 

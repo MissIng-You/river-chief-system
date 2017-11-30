@@ -173,7 +173,7 @@ const actions = {
     return exception.getChildArea(params)
       .then(
         result => commit(EXCEPTION_CHILD_AREA_SUCCESS, {result: result.data, $Message, $router, route}),
-        error => commit(EXCEPTION_CHILD_AREA_FAILURE, error)
+        error => commit('COMMON_ERROR', {key: 'childAreaError', value: error})
       );
   },
 
@@ -215,11 +215,13 @@ const mutations = {
   [EXCEPTION_DETAIL_SUCCESS] (state, {result, $Message, $router, route}) {
     console.log(`${EXCEPTION_DETAIL_SUCCESS}: %o`, result);
     state.detailResult = result;
+
+    // 更新解决异常模型中Id
     state.solveModel.ReportInfoId = result.Data && result.Data.Id;
 
-    if (result.IsError) {
+    if (result && result.IsError) {
       $Message.error({
-          content: '异常详情获取失败。。。',
+          content: result.Message || '异常详情获取失败。。。',
           duration: 3
       });
     }
@@ -359,6 +361,14 @@ const mutations = {
 
   [COMMON_LOAD_DONE](state) {
       state.loading = false;
+  },
+
+  // 处理统一的错误信息
+  ['COMMON_ERROR'] (state, {key, value}) {
+    console.log(`${key}: %o`, value);
+    state[key] = value;
+
+    // 跳转，处理统一错误提示
   },
 
   // 更新查询模型字段

@@ -99,10 +99,7 @@
         }
         .problem-content {
             width: 100%;
-            // height: 400px;
-            // overflow: scroll; 
             background-color: #f2f2f2;
-            margin-top: 20px;
         }
         .river-badge-item {
             position: relative;

@@ -1,7 +1,7 @@
 <style scope lang="sass">
     #container {
         width: 100%;
-        height: 560px;
+        // height: 560px;
         overflow: hidden;
     }
 </style>
@@ -12,7 +12,8 @@
 </template>
 
 <script type="text/babel">
-import { loadAMapAsync } from './../util/script';
+import { loadAMapAsync } from '../util/script';
+import { getDocumentHeight } from '../util/index';
 
 export default {
     beforeCreate() {
@@ -25,6 +26,12 @@ export default {
             // 初始化地图
             that.init();
         }, 1000);
+        var $container = document.getElementById('container');
+
+        let scrollbarRect = $container.getClientRects()
+        let scrollbarTop = scrollbarRect && scrollbarRect[0] && scrollbarRect[0].top;
+        let docHeight = getDocumentHeight();
+        $container.style.height = `${docHeight - scrollbarTop - 20}px`;
     },
     methods: {
         init: function() {

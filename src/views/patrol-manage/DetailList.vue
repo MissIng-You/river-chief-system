@@ -4,7 +4,7 @@
     $danger: #f06900;
 
     .detail-list {
-        padding:15px; 
+        padding-top:15px; 
 
         .detail-content {
             margin-bottom: 10px;
@@ -32,7 +32,7 @@
     }
     .detail-desc {
         padding-right: 20px;
-        border-right: 1px dashed $gray;
+        border-right: 1px dashed rgba($gray, .5);
 
         .desc-title {
             font-weight: 900;
@@ -42,6 +42,7 @@
         .desc-date {
             line-height: 22px;
             color: $gray;
+            float: right;
         }
         .desc-text {
             padding: 6px 0;
@@ -51,11 +52,11 @@
             .image {
                 padding-right: 8px;
                 margin-bottom: 8px;
-                height: 75px;
                 overflow: hidden;
             }
             img {
                 width: 100%;
+                height: 100px;
             }
         }
         .desc-address {
@@ -91,12 +92,12 @@
             </Col>
             <Col span="21">
                 <Row type="flex" align="middle">
-                    <Col span="16" class="detail-desc">
+                    <Col span="20" class="detail-desc">
                         <Row >
-                            <Col span="15">
+                            <Col span="16">
                                 <span class="desc-title">{{showChildTerm(detail.SonInspectionName)}}</span>
                             </Col>
-                            <Col span="9">
+                            <Col span="8">
                                 <span class="desc-date">
                                     <Icon type="ios-clock-outline"></Icon>
                                     {{detail.CreateTime}}
@@ -114,7 +115,7 @@
                             {{detail.Address}}
                         </span>
                     </Col>
-                    <Col span="8" class="detail-type">
+                    <Col span="4" class="detail-type">
                         <span v-if="detail.State == 1" class="type-text-primary">正常</span>
                         <span v-if="detail.State == 3" class="type-text-primary">已解决</span>
                         <span v-if="detail.State == 2 && detail.SolveExceptionsRecordList.length == 0" class="type-text-danger" >未解决</span>
